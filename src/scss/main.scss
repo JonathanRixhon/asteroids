@@ -3,5 +3,11 @@
 	margin: 0;
 }
 body {
+	text-align: center;
+	background: black;
+	color: white;
 	overflow: hidden;
+	canvas {
+		border: 1px solid white;
+	}
 }
