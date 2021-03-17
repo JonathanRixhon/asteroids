@@ -11,7 +11,7 @@ const ship = {
 	path: null,
 	//Bullets
 	bulletTimer: -1,
-	bulletTimerTreshold: 20,
+	bulletTimerTreshold: 10,
 	bullets: [],
 	//dom elt
 	canvasElt: null,
@@ -32,13 +32,21 @@ const ship = {
 		)
 		this.speed = new Vector(0, 0)
 		this.path = new Path2D()
+		this.shape = [
+			0,
+			(-1.5 * this.size) / 2,
+			this.size / 2,
+			0.5 + (1.5 / 2) * this.size,
+			-this.size / 2,
+			0.5 + (1.5 / 2) * this.size,
+		]
 		this.createPath()
 	},
 
 	createPath() {
-		this.path.moveTo(0, (-1.5 * this.size) / 2)
-		this.path.lineTo(this.size / 2, 0.5 + (1.5 / 2) * this.size)
-		this.path.lineTo(-this.size / 2, 0.5 + (1.5 / 2) * this.size)
+		this.path.moveTo(this.shape[0], this.shape[1])
+		this.path.lineTo(this.shape[2], this.shape[3])
+		this.path.lineTo(this.shape[4], this.shape[5])
 		this.path.closePath()
 	},
 
@@ -94,9 +102,6 @@ const ship = {
 		//position
 		this.ctx.translate(this.location.x, this.location.y)
 		this.ctx.rotate(this.heading)
-		//dessin
-		/* this.ctx.beginPath() */
-
 		this.ctx.stroke(this.path)
 		this.ctx.restore()
 	},

@@ -1,25 +1,35 @@
 import asteroidShapes from './asteroidShapes'
 import Vector from './Vector'
 export default class Asteroid {
-	constructor(canvasElt, ctx) {
+	constructor(canvasElt, ctx, parent = null) {
 		//dom elt
 		this.canvasElt = canvasElt
 		this.ctx = ctx
-		//preparing asterdoid
-		const asCount = asteroidShapes.length
-		const i = Math.floor(Math.random() * asCount)
-		this.shape = asteroidShapes[i]
+		//Génération conditionnelle en fonction de si c'est un enfant ou pas
+		if (!parent) {
+			this.rotationSpeed = Math.random() / 30
+			this.size = 10 + Math.random() * 5
+			this.location = new Vector(
+				Math.floor(Math.random() * this.canvasElt.width),
+				Math.floor(Math.random() * this.canvasElt.height)
+			)
+		} else {
+			this.rotationSpeed = parent.rotationSpeed * 2
+			this.size = parent.size / 2
+			this.location = new Vector(parent.location.x, parent.location.y)
+		}
 		//initialisation var de position et deplacement
-		this.size = 7 + Math.random() * 10
 		this.heading = Math.random() * Math.PI * 2
-		this.location = new Vector(
-			Math.floor(Math.random() * this.canvasElt.width),
-			Math.floor(Math.random() * this.canvasElt.height)
-		)
 		this.speed = new Vector(0, 0)
 		this.acceleration = new Vector(this.heading, 2 + Math.random() * 2)
 		this.speed.add(this.acceleration)
+		//rotation
+		this.rotation = 0
+		//preparing asterdoid
+		const asCount = asteroidShapes.length
+		const i = Math.floor(Math.random() * asCount)
 		//path
+		this.shape = asteroidShapes[i]
 		this.path = new Path2D()
 		this.createPath()
 	}
@@ -38,7 +48,7 @@ export default class Asteroid {
 		this.ctx.save()
 		//position
 		this.ctx.translate(this.location.x, this.location.y)
-		this.ctx.rotate(this.heading)
+		this.ctx.rotate(this.rotation)
 		//dessin
 
 		this.ctx.fill(this.path)
@@ -46,6 +56,7 @@ export default class Asteroid {
 	}
 	update() {
 		this.location.add(this.speed)
+		this.rotation += this.rotationSpeed
 		this.checkEdges()
 		this.draw()
 	}
