@@ -35,8 +35,11 @@ const main = {
 	},
 
 	animate() {
+		//test verouillage à 60 fps pour les écrans +60fps
+
 		//animation loop
-		this.requestId = window.requestAnimationFrame(() => {
+		this.requestId = window.requestAnimationFrame(timestamp => {
+			console.log(timestamp)
 			this.animate()
 		})
 		//clear the canvasElt
